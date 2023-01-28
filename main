@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+trap stop INT
+
+stopping=""
+stop() {
+  echo "Stopping..."
+  stopping=1
+  if [[ "$child" ]]; then
+    echo "Killing child $child"
+    kill -INT $child
+    wait $child
+  fi
+}
+
+while :; do
+  # See https://www.everythingcli.org/ssh-tunnelling-for-fun-and-profit-autossh/
+	autossh -M 0 \
+		-o "ExitOnForwardFailure=yes" \
+		-o "ServerAliveInterval=30" \
+		-o "ServerAliveCountMax=3" \
+    -o "StrictHostKeyChecking=no" \
+		-v \
+		"$@" &
+
+  child=$!
+  wait
+
+  if [[ $? == 1 ]]; then
+    exit 1
+  fi
+
+  if [[ "$stopping" ]]; then
+    echo "Exiting..."
+    break
+  fi
+
+  sleep 2
+done
