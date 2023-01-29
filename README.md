@@ -31,7 +31,7 @@ Example docker-compose configuration:
 
     ```yaml
       myhost-influxdb:
-        # <same has above>
+        # <same as above>
         command: ['-N', '-L', '0.0.0.0:8086:localhost:8086', 'myhost']
         ports: ['127.0.0.1:8086:8086']
     ```
