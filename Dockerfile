@@ -17,7 +17,7 @@ RUN addgroup -g 1000 -S app \
 USER app
 WORKDIR /home/app
 RUN mkdir -m 0500 .ssh
-COPY main ./
+COPY docker-entrypoint ./
 
 STOPSIGNAL INT
-ENTRYPOINT ["./main"]
+ENTRYPOINT ["./docker-entrypoint"]
